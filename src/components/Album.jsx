@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Navbar from './Navbar'
 import { useParams } from 'react-router-dom'
 import { albumsData, assets, songsData } from '../assets/assets'
 import { Clock, Play, Heart, MoreHorizontal } from 'lucide-react'
+import PlayerContext from '../context/PlayerContext'
 
 const Album = () => {
-  const { id } = useParams()
-  const albumData = albumsData[id]
+  const { id } = useParams();
+  const albumData = albumsData[id];
+  const {playWithId} = useContext(PlayerContext)
 
   return (
     <>
@@ -60,6 +62,7 @@ const Album = () => {
       <div className='space-y-1 pb-10'>
         {songsData.map((item, index) => (
           <div
+            onClick={() => playWithId(item.id)}
             key={index}
             className='grid grid-cols-3 sm:grid-cols-4 gap-2 items-center px-3 py-3 rounded-xl hover:bg-[#ffffff10] transition-all cursor-pointer'
           >
