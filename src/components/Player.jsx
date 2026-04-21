@@ -1,58 +1,68 @@
 import React, { useContext } from 'react'
 import { Shuffle, SkipBack, Play, Pause, SkipForward, Repeat, Mic2, ListMusic, MonitorSpeaker, Volume2, Maximize2 } from 'lucide-react'
-import { songsData } from '../assets/assets'
+
 import PlayerContext from '../context/PlayerContext'
 
 const Player = () => {
-
-    const {seekBar, seekBg} = useContext(PlayerContext);
-
+    const { track, seekBar, seekBg, playStatus, play, pause, time, previous, next, seekSong } = useContext(PlayerContext)
 
     return (
-        <div className='h-[10%] bg-[#0a0a0a] border-t border-gray-800 flex justify-between items-center px-5 text-white'>
+        <div className='h-[10%] bg-[#050505] border-t border-[#1f1f1f] flex justify-between items-center px-5 text-white'>
 
-            {/* Current Song */}
+            {/* Left Song Info */}
             <div className='hidden lg:flex items-center gap-4 w-[25%]'>
                 <img
-                    className='w-14 h-14 rounded-lg object-cover'
-                    src={songsData[0].image}
+                    className='w-14 h-14 rounded-xl object-cover shadow-lg'
+                    src={track.image}
                     alt=""
                 />
-
-                <div>
-                    <p className='font-semibold text-sm'>{songsData[0].name}</p>
-                    <p className='text-xs text-gray-400'>
-                        {songsData[0].desc.slice(0, 20)}
+                <div className='min-w-0'>
+                    <p className='font-semibold text-sm truncate'>
+                        {track.name}
+                    </p>
+                    <p className='text-xs text-gray-400 truncate'>
+                        {track.desc?.slice(0, 25)}
                     </p>
                 </div>
             </div>
 
             {/* Center Controls */}
-            <div className='flex flex-col items-center gap-2 flex-1'>
+            <div className='flex flex-col items-center gap-3 flex-1'>
 
+                {/* Buttons */}
                 <div className='flex items-center gap-5 text-gray-300'>
-
-                    <Shuffle className='w-4 h-4 cursor-pointer hover:text-[#D4AF37]' />
-                    <SkipBack className='w-5 h-5 cursor-pointer hover:text-white' />
-
-                    <div className='w-10 h-10 rounded-full bg-white text-black flex items-center justify-center cursor-pointer hover:scale-105 transition-all'>
-                        <Play className='w-5 h-5 ml-0.5' />
-                    </div>
-
-                    <SkipForward className='w-5 h-5 cursor-pointer hover:text-white' />
-                    <Repeat className='w-4 h-4 cursor-pointer hover:text-[#D4AF37]' />
-
+                    <Shuffle className='w-4 h-4 cursor-pointer hover:text-[#D4AF37] transition-all' />
+                    <SkipBack onClick={previous} className='w-5 h-5 cursor-pointer hover:text-white transition-all' />
+                    <button
+                        onClick={playStatus ? pause : play}
+                        className='w-11 h-11 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition-all'
+                    >
+                        {playStatus ? (
+                            <Pause className='w-5 h-5 fill-black' />
+                        ) : (
+                            <Play className='w-5 h-5 fill-black ml-0.5' />
+                        )}
+                    </button>
+                    <SkipForward onClick={next} className='w-5 h-5 cursor-pointer hover:text-white transition-all' />
+                    <Repeat className='w-4 h-4 cursor-pointer hover:text-[#D4AF37] transition-all' />
                 </div>
 
-                {/* Progress */}
+                {/* Seek Bar */}
                 <div className='flex items-center gap-3 w-full max-w-162.5'>
-                    <p className='text-xs text-gray-400'>1:06</p>
-
-                    <div ref={seekBg} className='flex-1 h-1 bg-gray-700 rounded-full cursor-pointer'>
-                        <hr ref={seekBar} className='w-[35%] h-1 bg-[#D4AF37] rounded-full' />
+                    <p className='text-xs text-gray-400'>{time.currentTime.minute}:{time.currentTime.second}</p>
+                    <div
+                        ref={seekBg}
+                        onClick={seekSong}
+                        className='flex-1 h-1 bg-gray-700 rounded-full cursor-pointer overflow-hidden'
+                    >
+                        <hr
+                            ref={seekBar}
+                            className='h-1 border-none w-[35%] bg-[#D4AF37] rounded-full'
+                        />
                     </div>
 
-                    <p className='text-xs text-gray-400'>3:20</p>
+                    <p className='text-xs text-gray-400'>{time.totalTime.minute} : {time.totalTime.second}</p>
+
                 </div>
 
             </div>
@@ -60,16 +70,16 @@ const Player = () => {
             {/* Right Controls */}
             <div className='hidden lg:flex items-center gap-3 w-[25%] justify-end text-gray-300'>
 
-                <Mic2 className='w-4 h-4 cursor-pointer hover:text-white' />
-                <ListMusic className='w-4 h-4 cursor-pointer hover:text-white' />
-                <MonitorSpeaker className='w-4 h-4 cursor-pointer hover:text-white' />
-                <Volume2 className='w-4 h-4 cursor-pointer hover:text-white' />
+                <Mic2 className='w-4 h-4 cursor-pointer hover:text-white transition-all' />
+                <ListMusic className='w-4 h-4 cursor-pointer hover:text-white transition-all' />
+                <MonitorSpeaker className='w-4 h-4 cursor-pointer hover:text-white transition-all' />
+                <Volume2 className='w-4 h-4 cursor-pointer hover:text-white transition-all' />
 
-                <div className='w-24 h-1 bg-gray-700 rounded-full'>
+                <div className='w-24 h-1 bg-gray-700 rounded-full overflow-hidden'>
                     <div className='w-[60%] h-1 bg-white rounded-full'></div>
                 </div>
 
-                <Maximize2 className='w-4 h-4 cursor-pointer hover:text-white' />
+                <Maximize2 className='w-4 h-4 cursor-pointer hover:text-white transition-all' />
 
             </div>
 

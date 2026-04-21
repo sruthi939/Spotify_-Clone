@@ -1,14 +1,18 @@
 import React from 'react'
 import { Home, Search, Library, Plus, ArrowRight } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const Sidebar = () => {
+
+    const navigate = useNavigate()
+
     return (
         <div className='w-[25%] h-full p-2 hidden lg:flex flex-col gap-2 text-white'>
 
             {/* Top Menu */}
             <div className='bg-[#121212] rounded-2xl p-6 space-y-5'>
 
-                <div className='flex items-center gap-4 cursor-pointer hover:text-[#D4AF37] transition-all'>
+                <div onClick={() => navigate('/')} className='flex items-center gap-4 cursor-pointer hover:text-[#D4AF37] transition-all'>
                     <Home className='w-6 h-6' />
                     <p className='font-semibold text-[15px]'>Home</p>
                 </div>
