@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Shuffle, SkipBack, Play, Pause, SkipForward, Repeat, Mic2, ListMusic, MonitorSpeaker, Volume2, Maximize2 } from 'lucide-react'
 import { songsData } from '../assets/assets'
+import PlayerContext from '../context/PlayerContext'
 
 const Player = () => {
+
+    const {seekBar, seekBg} = useContext(PlayerContext);
+
+
     return (
         <div className='h-[10%] bg-[#0a0a0a] border-t border-gray-800 flex justify-between items-center px-5 text-white'>
 
@@ -43,8 +48,8 @@ const Player = () => {
                 <div className='flex items-center gap-3 w-full max-w-162.5'>
                     <p className='text-xs text-gray-400'>1:06</p>
 
-                    <div className='flex-1 h-1 bg-gray-700 rounded-full cursor-pointer'>
-                        <div className='w-[35%] h-1 bg-[#D4AF37] rounded-full'></div>
+                    <div ref={seekBg} className='flex-1 h-1 bg-gray-700 rounded-full cursor-pointer'>
+                        <hr ref={seekBar} className='w-[35%] h-1 bg-[#D4AF37] rounded-full' />
                     </div>
 
                     <p className='text-xs text-gray-400'>3:20</p>
