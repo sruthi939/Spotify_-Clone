@@ -6,6 +6,9 @@ import AddSong from './pages/AddSong'
 import ListSong from './pages/ListSong'
 import AddAlbum from './pages/AddAlbum'
 import ListAlbum from './pages/ListAlbum'
+import Analytics from './pages/Analytics'
+import UserRoles from './pages/UserRoles'
+import Settings from './pages/Settings'
 
 export const url = 'http://localhost:4000'
 
@@ -21,13 +24,16 @@ const App = () => {
         <Navbar />
         
         {/* Scrollable Content */}
-        <div className='flex-1 overflow-y-auto custom-scrollbar bg-gradient-to-b from-[#0a0a0a] to-[#050505]'>
+        <div className='flex-1 overflow-y-auto bg-gradient-to-b from-[#0a0a0a] to-[#050505] scroll-smooth'>
           <Routes>
             <Route path='/add-song' element={<AddSong />} />
             <Route path='/list-song' element={<ListSong />} />
             <Route path='/add-album' element={<AddAlbum />} />
             <Route path='/list-album' element={<ListAlbum />} />
-            <Route path='/' element={<ListSong />} /> {/* Default route */}
+            <Route path='/analytics' element={<Analytics />} />
+            <Route path='/user-roles' element={<UserRoles />} />
+            <Route path='/settings' element={<Settings />} />
+            <Route path='/' element={<Analytics />} /> {/* Changed default to Analytics for 'fair' look */}
           </Routes>
         </div>
 

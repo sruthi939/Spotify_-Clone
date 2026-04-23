@@ -6,10 +6,13 @@ const Sidebar = () => {
   const location = useLocation()
 
   const navItems = [
-    { to: '/add-song', label: 'Add Song', icon: PlusCircle },
-    { to: '/list-song', label: 'List Songs', icon: List },
-    { to: '/add-album', label: 'Add Album', icon: PlusCircle },
-    { to: '/list-album', label: 'List Albums', icon: LayoutGrid },
+    { to: '/add-song', label: 'Add Song', icon: PlusCircle, group: 'Management' },
+    { to: '/list-song', label: 'List Songs', icon: List, group: 'Management' },
+    { to: '/add-album', label: 'Add Album', icon: PlusCircle, group: 'Management' },
+    { to: '/list-album', label: 'List Albums', icon: LayoutGrid, group: 'Management' },
+    { to: '/analytics', label: 'Analytics', icon: BarChart2, group: 'System' },
+    { to: '/user-roles', label: 'User Roles', icon: Users, group: 'System' },
+    { to: '/settings', label: 'Settings', icon: Settings, group: 'System' },
   ]
 
   return (
@@ -26,9 +29,9 @@ const Sidebar = () => {
       {/* Navigation */}
       <nav className='flex-1 space-y-2'>
         
-        <p className='text-[10px] font-black text-gray-500 uppercase tracking-[3px] mb-6 px-2'>Management</p>
+        <p className='text-[10px] font-black text-gray-500 uppercase tracking-[3px] mb-6 px-2 mt-4'>Management</p>
         
-        {navItems.map((item) => {
+        {navItems.filter(i => i.group === 'Management').map((item) => {
           const isActive = location.pathname === item.to
           const Icon = item.icon
           
@@ -47,25 +50,29 @@ const Sidebar = () => {
         <div className='pt-8 space-y-2'>
             <p className='text-[10px] font-black text-gray-500 uppercase tracking-[3px] mb-6 px-2'>System</p>
             
-            <button className='w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-gray-400 hover:text-white hover:bg-[#111] transition-all group'>
-                <BarChart2 className='w-5 h-5 text-gray-500 group-hover:text-white' />
-                <span className='text-sm font-bold'>Analytics</span>
-            </button>
-
-            <button className='w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-gray-400 hover:text-white hover:bg-[#111] transition-all group'>
-                <Users className='w-5 h-5 text-gray-500 group-hover:text-white' />
-                <span className='text-sm font-bold'>User Roles</span>
-            </button>
-
-            <button className='w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-gray-400 hover:text-white hover:bg-[#111] transition-all group'>
-                <Settings className='w-5 h-5 text-gray-500 group-hover:text-white' />
-                <span className='text-sm font-bold'>Settings</span>
-            </button>
+            {navItems.filter(i => i.group === 'System').map((item) => {
+              const isActive = location.pathname === item.to
+              const Icon = item.icon
+              
+              return (
+                <NavLink 
+                  key={item.to} 
+                  to={item.to} 
+                  className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all group ${isActive ? 'bg-[#1ED760]/10 text-[#1ED760] border border-[#1ED760]/20' : 'text-gray-400 hover:text-white hover:bg-[#111] border border-transparent'}`}
+                >
+                  <Icon className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
+                  <span className='text-sm font-bold'>{item.label}</span>
+                </NavLink>
+              )
+            })}
         </div>
       </nav>
 
       {/* Logout */}
-      <button className='flex items-center gap-4 px-4 py-4 mt-auto rounded-xl text-red-500 hover:bg-red-500/10 transition-all group font-black uppercase text-[10px] tracking-widest'>
+      <button 
+        onClick={() => window.location.href = '/'}
+        className='flex items-center gap-4 px-4 py-4 mt-auto rounded-xl text-red-500 hover:bg-red-500/10 transition-all group font-black uppercase text-[10px] tracking-widest'
+      >
         <LogOut className='w-5 h-5' />
         Logout Admin
       </button>
