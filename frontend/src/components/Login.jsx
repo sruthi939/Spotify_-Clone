@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { assets } from '../assets/assets'
-import { Phone, ChevronRight, ArrowLeft, ShieldCheck, Loader2, Mail, Smartphone } from 'lucide-react'
+import { Phone, ChevronRight, ArrowLeft, ShieldCheck, Loader2, Mail, Smartphone, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
@@ -11,6 +11,8 @@ const Login = () => {
   const [timer, setTimer] = useState(30)
   const navigate = useNavigate()
 
+  const [showNotification, setShowNotification] = useState(false)
+
   useEffect(() => {
     let interval;
     if (step === 'otp' && timer > 0) {
@@ -18,6 +20,18 @@ const Login = () => {
     }
     return () => clearInterval(interval)
   }, [step, timer])
+
+  // SIMULATE SMS ARRIVAL
+  useEffect(() => {
+    if (step === 'otp') {
+        const timeout = setTimeout(() => {
+            setShowNotification(true)
+            // Auto-hide after 5 seconds
+            setTimeout(() => setShowNotification(false), 5000)
+        }, 2000)
+        return () => clearTimeout(timeout)
+    }
+  }, [step])
 
   const handleMobileSubmit = (e) => {
     e.preventDefault()
@@ -50,7 +64,6 @@ const Login = () => {
     if (code === '1234') {
       setLoading(true)
       setTimeout(() => {
-        // SETTING CONSISTENT KEY
         localStorage.setItem('mobileNumber', mobile)
         navigate('/')
       }, 1000)
@@ -64,12 +77,30 @@ const Login = () => {
   const resendOtp = () => {
     if (timer === 0) {
       setTimer(30)
-      // REALISTIC FEEDBACK
+      setLoading(true)
+      setTimeout(() => {
+        setLoading(false)
+        setShowNotification(true)
+        setTimeout(() => setShowNotification(false), 5000)
+      }, 1000)
     }
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-[#050505] text-white p-4 font-sans'>
+    <div className='flex flex-col items-center justify-center min-h-screen bg-[#050505] text-white p-4 font-sans relative overflow-hidden'>
+      
+      {/* SMS NOTIFICATION SIMULATION */}
+      <div className={`fixed top-6 left-1/2 -translate-x-1/2 w-full max-w-[380px] bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl flex items-center gap-4 z-[200] transition-all duration-500 shadow-2xl ${showNotification ? 'translate-y-0 opacity-100' : '-translate-y-20 opacity-0 pointer-events-none'}`}>
+          <div className='w-10 h-10 bg-[#1ED760] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(30,215,96,0.5)]'>
+            <Smartphone className='text-black w-5 h-5' />
+          </div>
+          <div className='flex-1'>
+            <p className='text-[10px] font-black uppercase tracking-widest text-gray-400'>Messages • Now</p>
+            <p className='text-xs font-bold text-white'>Your Spotify code is <span className='text-[#1ED760] font-black text-sm'>1234</span>. Don't share this with anyone.</p>
+          </div>
+          <X onClick={() => setShowNotification(false)} className='w-4 h-4 text-gray-500 cursor-pointer hover:text-white' />
+      </div>
+
       <div className='w-full max-w-[450px] bg-[#111] border border-[#222] p-10 rounded-[40px] shadow-[0_40px_100px_rgba(0,0,0,0.9)] relative overflow-hidden'>
         
         <div className='absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] via-[#1ED760] to-[#D4AF37]'></div>
