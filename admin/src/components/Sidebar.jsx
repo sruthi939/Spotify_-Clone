@@ -20,23 +20,39 @@ const Sidebar = () => {
         <p className='text-[10px] font-black text-gray-500 uppercase tracking-[3px] mb-6 px-2'>Management</p>
         
         <NavLink to="/add-song" className={({isActive}) => `flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all group ${isActive ? 'bg-[#1ED760]/10 text-[#1ED760] border border-[#1ED760]/20' : 'text-gray-400 hover:text-white hover:bg-[#111]'}`}>
-          <PlusCircle className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
-          <span className='text-sm font-bold'>Add Song</span>
+          {({isActive}) => (
+            <>
+              <PlusCircle className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
+              <span className='text-sm font-bold'>Add Song</span>
+            </>
+          )}
         </NavLink>
 
         <NavLink to="/list-song" className={({isActive}) => `flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all group ${isActive ? 'bg-[#1ED760]/10 text-[#1ED760] border border-[#1ED760]/20' : 'text-gray-400 hover:text-white hover:bg-[#111]'}`}>
-          <List className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
-          <span className='text-sm font-bold'>List Songs</span>
+          {({isActive}) => (
+            <>
+              <List className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
+              <span className='text-sm font-bold'>List Songs</span>
+            </>
+          )}
         </NavLink>
 
         <NavLink to="/add-album" className={({isActive}) => `flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all group ${isActive ? 'bg-[#1ED760]/10 text-[#1ED760] border border-[#1ED760]/20' : 'text-gray-400 hover:text-white hover:bg-[#111]'}`}>
-          <PlusCircle className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
-          <span className='text-sm font-bold'>Add Album</span>
+          {({isActive}) => (
+            <>
+              <PlusCircle className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
+              <span className='text-sm font-bold'>Add Album</span>
+            </>
+          )}
         </NavLink>
 
         <NavLink to="/list-album" className={({isActive}) => `flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all group ${isActive ? 'bg-[#1ED760]/10 text-[#1ED760] border border-[#1ED760]/20' : 'text-gray-400 hover:text-white hover:bg-[#111]'}`}>
-          <LayoutGrid className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
-          <span className='text-sm font-bold'>List Albums</span>
+          {({isActive}) => (
+            <>
+              <LayoutGrid className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
+              <span className='text-sm font-bold'>List Albums</span>
+            </>
+          )}
         </NavLink>
 
         <div className='pt-8 space-y-2'>
