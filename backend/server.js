@@ -8,6 +8,8 @@ import albumRouter from './routes/albumRoute.js';
 import playlistRouter from './routes/playlistRoute.js';
 import userRouter from './routes/userRoute.js';
 import searchRouter from './routes/searchRoute.js';
+import paymentRouter from './routes/paymentRoute.js';
+
 // App Config
 const app = express();
 const port = process.env.PORT || 4000;
@@ -26,6 +28,7 @@ app.use('/api/song', songRouter);
 app.use('/api/album', albumRouter);
 app.use('/api/playlist', playlistRouter);
 app.use('/api/search', searchRouter);
+app.use('/api/payment', paymentRouter);
 
 
 app.get('/', (req, res) => res.send('Spotify Backend API Working!'));

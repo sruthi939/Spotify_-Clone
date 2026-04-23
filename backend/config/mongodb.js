@@ -3,17 +3,12 @@ import mongoose from "mongoose";
 const connectDB = async () => {
     try {
         mongoose.connection.on('connected', () => {
-            console.log("DB connection established");
-        });
-
-        // Use standard mongodb uri or fallback to a local one
-        const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/spotify-clone';
-        
-        await mongoose.connect(mongoUri);
+            console.log("DB Connected")
+        })
+        await mongoose.connect(process.env.MONGODB_URI)
     } catch (error) {
-        console.log(`Error: ${error.message}`);
-        process.exit(1);
+        console.error("MongoDB Connection Error:", error.message);
     }
-};
+}
 
 export default connectDB;
