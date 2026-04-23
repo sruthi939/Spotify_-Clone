@@ -1,8 +1,17 @@
 import React from 'react'
 import { PlusCircle, List, Music, LayoutGrid, BarChart2, Users, Settings, LogOut } from 'lucide-react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 const Sidebar = () => {
+  const location = useLocation()
+
+  const navItems = [
+    { to: '/add-song', label: 'Add Song', icon: PlusCircle },
+    { to: '/list-song', label: 'List Songs', icon: List },
+    { to: '/add-album', label: 'Add Album', icon: PlusCircle },
+    { to: '/list-album', label: 'List Albums', icon: LayoutGrid },
+  ]
+
   return (
     <div className='w-[18%] min-h-screen bg-[#050505] border-r border-[#111] flex flex-col p-6'>
       
@@ -19,41 +28,21 @@ const Sidebar = () => {
         
         <p className='text-[10px] font-black text-gray-500 uppercase tracking-[3px] mb-6 px-2'>Management</p>
         
-        <NavLink to="/add-song" className={({isActive}) => `flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all group ${isActive ? 'bg-[#1ED760]/10 text-[#1ED760] border border-[#1ED760]/20' : 'text-gray-400 hover:text-white hover:bg-[#111]'}`}>
-          {({isActive}) => (
-            <>
-              <PlusCircle className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
-              <span className='text-sm font-bold'>Add Song</span>
-            </>
-          )}
-        </NavLink>
-
-        <NavLink to="/list-song" className={({isActive}) => `flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all group ${isActive ? 'bg-[#1ED760]/10 text-[#1ED760] border border-[#1ED760]/20' : 'text-gray-400 hover:text-white hover:bg-[#111]'}`}>
-          {({isActive}) => (
-            <>
-              <List className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
-              <span className='text-sm font-bold'>List Songs</span>
-            </>
-          )}
-        </NavLink>
-
-        <NavLink to="/add-album" className={({isActive}) => `flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all group ${isActive ? 'bg-[#1ED760]/10 text-[#1ED760] border border-[#1ED760]/20' : 'text-gray-400 hover:text-white hover:bg-[#111]'}`}>
-          {({isActive}) => (
-            <>
-              <PlusCircle className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
-              <span className='text-sm font-bold'>Add Album</span>
-            </>
-          )}
-        </NavLink>
-
-        <NavLink to="/list-album" className={({isActive}) => `flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all group ${isActive ? 'bg-[#1ED760]/10 text-[#1ED760] border border-[#1ED760]/20' : 'text-gray-400 hover:text-white hover:bg-[#111]'}`}>
-          {({isActive}) => (
-            <>
-              <LayoutGrid className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
-              <span className='text-sm font-bold'>List Albums</span>
-            </>
-          )}
-        </NavLink>
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.to
+          const Icon = item.icon
+          
+          return (
+            <NavLink 
+              key={item.to} 
+              to={item.to} 
+              className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all group ${isActive ? 'bg-[#1ED760]/10 text-[#1ED760] border border-[#1ED760]/20' : 'text-gray-400 hover:text-white hover:bg-[#111] border border-transparent'}`}
+            >
+              <Icon className={`w-5 h-5 ${isActive ? 'text-[#1ED760]' : 'text-gray-500 group-hover:text-white'}`} />
+              <span className='text-sm font-bold'>{item.label}</span>
+            </NavLink>
+          )
+        })}
 
         <div className='pt-8 space-y-2'>
             <p className='text-[10px] font-black text-gray-500 uppercase tracking-[3px] mb-6 px-2'>System</p>

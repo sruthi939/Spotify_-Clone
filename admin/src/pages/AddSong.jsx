@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { url } from '../App'
 import { Music, Image as ImageIcon, Upload, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 
 const AddSong = () => {
@@ -22,7 +23,7 @@ const AddSong = () => {
             formData.append('audio', song)
             formData.append('album', album)
 
-            const response = await axios.post('http://localhost:4000/api/song/add', formData)
+            const response = await axios.post(`${url}/api/song/add`, formData)
 
             if (response.data.success) {
                 setSuccess(true)

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Trash2, LayoutGrid, MoreVertical, Search, AlertCircle, Loader2, Music } from 'lucide-react'
+import { url } from '../App'
+import { Trash2, LayoutGrid, Search, AlertCircle, Loader2, Music } from 'lucide-react'
 
 const ListAlbum = () => {
     const [data, setData] = useState([])
@@ -8,7 +9,7 @@ const ListAlbum = () => {
 
     const fetchAlbums = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/album/list')
+            const response = await axios.get(`${url}/api/album/list`)
             if (response.data.success) {
                 setData(response.data.albums)
             }
@@ -19,9 +20,9 @@ const ListAlbum = () => {
     }
 
     const removeAlbum = async (id) => {
-        if(window.confirm("Are you sure you want to delete this album? This will not delete the songs inside it.")) {
+        if (window.confirm("Are you sure you want to delete this album? This will not delete the songs inside it.")) {
             try {
-                const response = await axios.post('http://localhost:4000/api/album/remove', { id })
+                const response = await axios.post(`${url}/api/album/remove`, { id })
                 if (response.data.success) {
                     fetchAlbums()
                 }
@@ -42,7 +43,7 @@ const ListAlbum = () => {
                     <LayoutGrid className='text-[#1ED760] w-6 h-6' />
                     <h2 className='text-3xl font-black tracking-tighter'>Album Collections</h2>
                 </div>
-                
+
                 <div className='relative w-[300px]'>
                     <Search className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4' />
                     <input type="text" placeholder="Search albums..." className='w-full bg-[#111] border border-[#222] rounded-full py-2 px-10 text-xs font-bold focus:outline-none focus:border-[#1ED760]' />
@@ -64,8 +65,8 @@ const ListAlbum = () => {
                     {data.map((item, index) => (
                         <div key={index} className='bg-[#111] rounded-[32px] p-6 border border-[#222] hover:border-[#1ED760]/30 transition-all group relative overflow-hidden'>
                             {/* Color Bar */}
-                            <div style={{backgroundColor: item.bgColour}} className='absolute top-0 left-0 w-full h-1 opacity-50'></div>
-                            
+                            <div style={{ backgroundColor: item.bgColour }} className='absolute top-0 left-0 w-full h-1 opacity-50'></div>
+
                             <div className='flex flex-col gap-4'>
                                 <div className='relative aspect-square rounded-2xl overflow-hidden shadow-2xl group-hover:scale-[1.02] transition-all duration-500'>
                                     <img src={item.image} alt="" className='w-full h-full object-cover' />
@@ -75,14 +76,14 @@ const ListAlbum = () => {
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 <div className='flex items-start justify-between'>
                                     <div className='flex-1 pr-4'>
                                         <h3 className='font-black text-lg text-white truncate group-hover:text-[#1ED760] transition-colors'>{item.name}</h3>
                                         <p className='text-[10px] text-gray-500 font-bold uppercase tracking-widest truncate'>{item.desc}</p>
                                     </div>
                                     <div className='flex items-center gap-1'>
-                                        <button 
+                                        <button
                                             onClick={() => removeAlbum(item._id)}
                                             className='p-2 rounded-lg text-gray-600 hover:text-red-500 hover:bg-red-500/10 transition-all'
                                         >
@@ -93,7 +94,7 @@ const ListAlbum = () => {
 
                                 <div className='flex items-center justify-between pt-4 border-t border-[#222]'>
                                     <div className='flex items-center gap-2'>
-                                        <div style={{backgroundColor: item.bgColour}} className='w-3 h-3 rounded-full'></div>
+                                        <div style={{ backgroundColor: item.bgColour }} className='w-3 h-3 rounded-full'></div>
                                         <span className='text-[9px] font-black text-gray-500 uppercase tracking-widest'>{item.bgColour}</span>
                                     </div>
                                     <span className='text-[9px] font-black text-[#1ED760] uppercase tracking-widest bg-[#1ED760]/10 px-2 py-0.5 rounded'>Active</span>

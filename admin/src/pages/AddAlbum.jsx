@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { url } from '../App'
 import { LayoutGrid, Image as ImageIcon, Upload, CheckCircle, Loader2 } from 'lucide-react'
 
 const AddAlbum = () => {
@@ -20,7 +21,7 @@ const AddAlbum = () => {
             formData.append('image', image)
             formData.append('bgColour', color)
 
-            const response = await axios.post('http://localhost:4000/api/album/add', formData)
+            const response = await axios.post(`${url}/api/album/add`, formData)
 
             if (response.data.success) {
                 setSuccess(true)

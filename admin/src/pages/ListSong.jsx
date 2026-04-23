@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { url } from '../App'
 import { Trash2, Play, Music, Clock, MoreVertical, Search, AlertCircle, Loader2 } from 'lucide-react'
 
 const ListSong = () => {
@@ -8,7 +9,7 @@ const ListSong = () => {
 
     const fetchSongs = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/song/list')
+            const response = await axios.get(`${url}/api/song/list`)
             if (response.data.success) {
                 setData(response.data.songs)
             }
@@ -21,7 +22,7 @@ const ListSong = () => {
     const removeSong = async (id) => {
         if(window.confirm("Are you sure you want to delete this track?")) {
             try {
-                const response = await axios.post('http://localhost:4000/api/song/remove', { id })
+                const response = await axios.post(`${url}/api/song/remove`, { id })
                 if (response.data.success) {
                     fetchSongs()
                 }
