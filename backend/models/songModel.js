@@ -7,6 +7,7 @@ const songSchema = new mongoose.Schema({
     image: { type: String, required: true },
     file: { type: String, required: true },
     duration: { type: String, required: true },
+    plays: { type: Number, default: 0 },
     
     // RBAC Context: Artist who uploaded this song
     artist: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false } 

@@ -51,3 +51,15 @@ export const getLikedSongs = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+// @desc    List all users (Admin only)
+// @route   GET /api/user/list
+// @access  Private/Admin
+export const listUsers = async (req, res) => {
+    try {
+        const users = await userModel.find({}).select('-password');
+        res.json({ success: true, users });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};

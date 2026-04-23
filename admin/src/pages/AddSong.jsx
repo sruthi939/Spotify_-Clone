@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { url } from '../App'
 import { Music, Image as ImageIcon, Upload, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
@@ -11,6 +11,22 @@ const AddSong = () => {
     const [album, setAlbum] = useState("none")
     const [loading, setLoading] = useState(false)
     const [success, setSuccess] = useState(false)
+    const [albumData, setAlbumData] = useState([])
+
+    const fetchAlbums = async () => {
+        try {
+            const response = await axios.get(`${url}/api/album/list`)
+            if (response.data.success) {
+                setAlbumData(response.data.albums)
+            }
+        } catch (error) {
+            console.error("Error fetching albums:", error)
+        }
+    }
+
+    useEffect(() => {
+        fetchAlbums()
+    }, [])
 
     const onSubmitHandler = async (e) => {
         e.preventDefault()
@@ -103,8 +119,11 @@ const AddSong = () => {
 
                     <div className='flex flex-col gap-3'>
                         <p className='text-[10px] font-black uppercase tracking-[3px] text-gray-500'>Select Album</p>
-                        <select onChange={(e)=>setAlbum(e.target.value)} defaultValue={album} className='bg-[#111] border border-[#222] rounded-2xl p-4 text-sm font-bold focus:outline-none focus:border-[#1ED760] transition-all cursor-pointer appearance-none'>
+                        <select onChange={(e)=>setAlbum(e.target.value)} value={album} className='bg-[#111] border border-[#222] rounded-2xl p-4 text-sm font-bold focus:outline-none focus:border-[#1ED760] transition-all cursor-pointer appearance-none'>
                             <option value="none">Standalone Single</option>
+                            {albumData.map((item, index) => (
+                                <option key={index} value={item.name}>{item.name}</option>
+                            ))}
                         </select>
                     </div>
                 </div>

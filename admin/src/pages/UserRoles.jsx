@@ -4,15 +4,24 @@ import { url } from '../App'
 import { Users, Shield, User, UserCheck, Star, MoreVertical, Search, ShieldAlert, Loader2 } from 'lucide-react'
 
 const UserRoles = () => {
-    const [users, setUsers] = useState([
-        { _id: '1', name: 'Sruthi Admin', email: 'sruthi@spotify.com', role: 'admin', lastActive: 'Now' },
-        { _id: '2', name: 'Artist Mike', email: 'mike@records.com', role: 'artist', lastActive: '2h ago' },
-        { _id: '3', name: 'Alex Listener', email: 'alex@gmail.com', role: 'listener', lastActive: '1d ago' },
-    ])
-    const [loading, setLoading] = useState(false)
+    const [users, setUsers] = useState([])
+    const [loading, setLoading] = useState(true)
 
-    // In a real production app, we would fetch users here.
-    // Since we only have a simple auth system for now, we'll use these fair placeholders.
+    const fetchUsers = async () => {
+        try {
+            const response = await axios.get(`${url}/api/user/list`)
+            if (response.data.success) {
+                setUsers(response.data.users)
+            }
+        } catch (error) {
+            console.error("Error fetching users:", error)
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        fetchUsers()
+    }, [])
 
     const getRoleIcon = (role) => {
         switch (role) {
@@ -36,56 +45,68 @@ const UserRoles = () => {
                 </div>
             </div>
 
-            <div className='bg-[#0a0a0a] border border-[#111] rounded-[40px] overflow-hidden shadow-2xl'>
-                <table className='w-full text-left'>
-                    <thead>
-                        <tr className='bg-[#111] border-b border-[#222]'>
-                            <th className='px-8 py-6 text-[10px] font-black text-gray-500 uppercase tracking-widest'>Identity</th>
-                            <th className='px-8 py-6 text-[10px] font-black text-gray-500 uppercase tracking-widest'>Assigned Role</th>
-                            <th className='px-8 py-6 text-[10px] font-black text-gray-500 uppercase tracking-widest'>Last Session</th>
-                            <th className='px-8 py-6 text-[10px] font-black text-gray-500 uppercase tracking-widest text-right'>Permissions</th>
-                        </tr>
-                    </thead>
-                    <tbody className='divide-y divide-[#111]'>
-                        {users.map((u) => (
-                            <tr key={u._id} className='group hover:bg-[#ffffff03] transition-all'>
-                                <td className='px-8 py-6'>
-                                    <div className='flex items-center gap-4'>
-                                        <div className='w-12 h-12 rounded-full bg-[#1a1a1a] border border-[#222] flex items-center justify-center text-white font-black group-hover:border-[#1ED760]/30 transition-all shadow-lg'>
-                                            {u.name[0]}
-                                        </div>
-                                        <div>
-                                            <p className='font-black text-white text-sm'>{u.name}</p>
-                                            <p className='text-xs text-gray-500 font-bold'>{u.email}</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className='px-8 py-6'>
-                                    <div className='flex items-center gap-2 px-3 py-1.5 bg-[#111] rounded-full w-fit border border-[#222] group-hover:border-white/10 transition-all'>
-                                        {getRoleIcon(u.role)}
-                                        <span className={`text-[10px] font-black uppercase tracking-widest ${u.role === 'admin' ? 'text-[#1ED760]' : u.role === 'artist' ? 'text-[#D4AF37]' : 'text-gray-400'}`}>
-                                            {u.role}
-                                        </span>
-                                    </div>
-                                </td>
-                                <td className='px-8 py-6'>
-                                    <p className='text-xs font-bold text-gray-500'>{u.lastActive}</p>
-                                </td>
-                                <td className='px-8 py-6 text-right'>
-                                    <div className='flex items-center justify-end gap-2'>
-                                        <button className='px-4 py-2 bg-[#1a1a1a] hover:bg-[#222] text-white text-[10px] font-black uppercase tracking-widest rounded-full border border-[#222] transition-all'>
-                                            Edit Rights
-                                        </button>
-                                        <button className='p-2 hover:bg-red-500/10 text-gray-600 hover:text-red-500 rounded-xl transition-all'>
-                                            <ShieldAlert className='w-4 h-4' />
-                                        </button>
-                                    </div>
-                                </td>
+            {loading ? (
+                <div className='flex flex-col items-center justify-center py-40 gap-4'>
+                    <Loader2 className='w-12 h-12 text-[#1ED760] animate-spin' />
+                    <p className='text-gray-500 font-bold uppercase text-[10px] tracking-widest animate-pulse'>Fetching user database...</p>
+                </div>
+            ) : users.length === 0 ? (
+                <div className='flex flex-col items-center justify-center py-40 gap-4 bg-[#111] rounded-[40px] border border-[#222] border-dashed'>
+                    <ShieldAlert className='w-12 h-12 text-gray-700' />
+                    <p className='text-gray-500 font-bold'>No users found in the system.</p>
+                </div>
+            ) : (
+                <div className='bg-[#0a0a0a] border border-[#111] rounded-[40px] overflow-hidden shadow-2xl'>
+                    <table className='w-full text-left'>
+                        <thead>
+                            <tr className='bg-[#111] border-b border-[#222]'>
+                                <th className='px-8 py-6 text-[10px] font-black text-gray-500 uppercase tracking-widest'>Identity</th>
+                                <th className='px-8 py-6 text-[10px] font-black text-gray-500 uppercase tracking-widest'>Assigned Role</th>
+                                <th className='px-8 py-6 text-[10px] font-black text-gray-500 uppercase tracking-widest'>Last Session</th>
+                                <th className='px-8 py-6 text-[10px] font-black text-gray-500 uppercase tracking-widest text-right'>Permissions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody className='divide-y divide-[#111]'>
+                            {users.map((u) => (
+                                <tr key={u._id} className='group hover:bg-[#ffffff03] transition-all'>
+                                    <td className='px-8 py-6'>
+                                        <div className='flex items-center gap-4'>
+                                            <div className='w-12 h-12 rounded-full bg-[#1a1a1a] border border-[#222] flex items-center justify-center text-white font-black group-hover:border-[#1ED760]/30 transition-all shadow-lg'>
+                                                {u.name ? u.name[0] : '?'}
+                                            </div>
+                                            <div>
+                                                <p className='font-black text-white text-sm'>{u.name}</p>
+                                                <p className='text-xs text-gray-500 font-bold'>{u.email}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className='px-8 py-6'>
+                                        <div className='flex items-center gap-2 px-3 py-1.5 bg-[#111] rounded-full w-fit border border-[#222] group-hover:border-white/10 transition-all'>
+                                            {getRoleIcon(u.role)}
+                                            <span className={`text-[10px] font-black uppercase tracking-widest ${u.role === 'admin' ? 'text-[#1ED760]' : u.role === 'artist' ? 'text-[#D4AF37]' : 'text-gray-400'}`}>
+                                                {u.role}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className='px-8 py-6'>
+                                        <p className='text-xs font-bold text-gray-500'>{u.lastActive || 'N/A'}</p>
+                                    </td>
+                                    <td className='px-8 py-6 text-right'>
+                                        <div className='flex items-center justify-end gap-2'>
+                                            <button className='px-4 py-2 bg-[#1a1a1a] hover:bg-[#222] text-white text-[10px] font-black uppercase tracking-widest rounded-full border border-[#222] transition-all'>
+                                                Edit Rights
+                                            </button>
+                                            <button className='p-2 hover:bg-red-500/10 text-gray-600 hover:text-red-500 rounded-xl transition-all'>
+                                                <ShieldAlert className='w-4 h-4' />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
 
             <div className='mt-8 p-6 bg-[#1ED760]/5 border border-[#1ED760]/10 rounded-3xl flex items-center justify-between'>
                 <div className='flex items-center gap-4'>

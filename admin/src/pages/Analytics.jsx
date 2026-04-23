@@ -14,14 +14,19 @@ const Analytics = () => {
 
     const fetchStats = async () => {
         try {
-            const [songsRes, albumsRes] = await Promise.all([
+            const [songsRes, albumsRes, usersRes] = await Promise.all([
                 axios.get(`${url}/api/song/list`),
-                axios.get(`${url}/api/album/list`)
+                axios.get(`${url}/api/album/list`),
+                axios.get(`${url}/api/user/list`)
             ])
+            const totalPlays = songsRes.data.songs.reduce((acc, song) => acc + (song.plays || 0), 0)
+            
             setStats(prev => ({
                 ...prev,
                 songs: songsRes.data.songs.length,
-                albums: albumsRes.data.albums.length
+                albums: albumsRes.data.albums.length,
+                users: usersRes.data.users.length,
+                plays: totalPlays > 1000 ? `${(totalPlays/1000).toFixed(1)}K` : totalPlays
             }))
         } catch (error) {
             console.error("Error fetching stats:", error)
