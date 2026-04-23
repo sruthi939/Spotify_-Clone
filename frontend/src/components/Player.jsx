@@ -1,38 +1,78 @@
 import React, { useContext } from 'react'
-import { Shuffle, SkipBack, Play, Pause, SkipForward, Repeat, Mic2, ListMusic, MonitorSpeaker, Volume2, Maximize2 } from 'lucide-react'
+import {
+    Shuffle,
+    SkipBack,
+    Play,
+    Pause,
+    SkipForward,
+    Repeat,
+    Mic2,
+    ListMusic,
+    MonitorSpeaker,
+    Volume2,
+    Maximize2
+} from 'lucide-react'
 
-import PlayerContext from '../context/PlayerContext'
+import { PlayerContext } from '../context/PlayerContext'
 
 const Player = () => {
-    const { track, seekBar, seekBg, playStatus, play, pause, time, previous, next, seekSong } = useContext(PlayerContext)
+    const { 
+        track, 
+        seekBar, 
+        seekBg, 
+        playStatus, 
+        play, 
+        pause, 
+        time, 
+        previous, 
+        next, 
+        seekSong, 
+        volume, 
+        changeVolume, 
+        isShuffle, 
+        toggleShuffle, 
+        isRepeat, 
+        toggleRepeat 
+    } = useContext(PlayerContext)
 
     return (
         <div className='h-[10%] bg-[#050505] border-t border-[#D4AF37]/20 flex justify-between items-center px-5 text-white shadow-[0_-5px_20px_rgba(0,0,0,0.8)] z-50'>
 
             {/* Left Song Info */}
             <div className='hidden lg:flex items-center gap-4 w-[25%]'>
+
                 <img
                     className='w-14 h-14 rounded-xl object-cover shadow-[0_0_10px_rgba(212,175,55,0.2)] border border-[#D4AF37]/20'
-                    src={track.image}
+                    src={track?.image || null}
                     alt=""
                 />
+
                 <div className='min-w-0'>
                     <p className='font-semibold text-sm truncate hover:text-[#D4AF37] cursor-pointer transition-colors'>
-                        {track.name}
+                        {track?.name || 'No Song'}
                     </p>
+
                     <p className='text-xs text-gray-400 truncate hover:text-white cursor-pointer transition-colors'>
-                        {track.desc?.slice(0, 25)}
+                        {track?.desc?.slice(0, 25) || 'Loading...'}
                     </p>
                 </div>
+
             </div>
 
             {/* Center Controls */}
             <div className='flex flex-col items-center gap-3 flex-1'>
 
-                {/* Buttons */}
                 <div className='flex items-center gap-6 text-gray-300'>
-                    <Shuffle className='w-4 h-4 cursor-pointer hover:text-[#1ED760] transition-all' />
-                    <SkipBack onClick={previous} className='w-5 h-5 cursor-pointer hover:text-[#D4AF37] transition-all' />
+
+                    <Shuffle 
+                        onClick={toggleShuffle}
+                        className={`w-4 cursor-pointer hover:text-white transition-colors ${isShuffle ? 'text-[#1ED760]' : 'text-gray-400'}`} 
+                    />
+                    <SkipBack 
+                        onClick={previous}
+                        className='w-5 cursor-pointer hover:text-white transition-colors fill-current' 
+                    />
+
                     <button
                         onClick={playStatus ? pause : play}
                         className='w-11 h-11 rounded-full bg-gradient-to-br from-[#1ED760] to-[#159f46] text-black flex items-center justify-center hover:scale-105 shadow-[0_0_15px_rgba(30,215,96,0.4)] transition-all'
@@ -43,13 +83,26 @@ const Player = () => {
                             <Play className='w-5 h-5 fill-black ml-0.5' />
                         )}
                     </button>
-                    <SkipForward onClick={next} className='w-5 h-5 cursor-pointer hover:text-[#D4AF37] transition-all' />
-                    <Repeat className='w-4 h-4 cursor-pointer hover:text-[#1ED760] transition-all' />
+
+                    <SkipForward 
+                        onClick={next}
+                        className='w-5 cursor-pointer hover:text-white transition-colors fill-current' 
+                    />
+                    <Repeat 
+                        onClick={toggleRepeat}
+                        className={`w-4 cursor-pointer hover:text-white transition-colors ${isRepeat ? 'text-[#1ED760]' : 'text-gray-400'}`} 
+                    />
+
                 </div>
 
-                {/* Seek Bar */}
-                <div className='flex items-center gap-3 w-full max-w-162.5'>
-                    <p className='text-xs text-[#D4AF37] font-medium'>{time.currentTime.minute}:{time.currentTime.second.toString().padStart(2, '0')}</p>
+                {/* Seek */}
+                <div className='flex items-center gap-3 w-full max-w-[650px]'>
+
+                    <p className='text-xs text-[#D4AF37] font-medium'>
+                        {time?.currentTime?.minute || 0}:
+                        {(time?.currentTime?.second || 0).toString().padStart(2, '0')}
+                    </p>
+
                     <div
                         ref={seekBg}
                         onClick={seekSong}
@@ -57,11 +110,14 @@ const Player = () => {
                     >
                         <hr
                             ref={seekBar}
-                            className='h-full border-none w-[35%] bg-gradient-to-r from-[#D4AF37] to-[#f3ca40] rounded-full shadow-[0_0_10px_rgba(212,175,55,0.8)] relative'
+                            className='h-full border-none w-[35%] bg-gradient-to-r from-[#D4AF37] to-[#f3ca40] rounded-full shadow-[0_0_10px_rgba(212,175,55,0.8)]'
                         />
                     </div>
 
-                    <p className='text-xs text-gray-400 font-medium'>{time.totalTime.minute}:{time.totalTime.second.toString().padStart(2, '0')}</p>
+                    <p className='text-xs text-gray-400 font-medium'>
+                        {time?.totalTime?.minute || 0}:
+                        {(time?.totalTime?.second || 0).toString().padStart(2, '0')}
+                    </p>
 
                 </div>
 
@@ -75,8 +131,19 @@ const Player = () => {
                 <MonitorSpeaker className='w-4 h-4 cursor-pointer hover:text-[#1ED760] transition-all' />
                 <Volume2 className='w-4 h-4 cursor-pointer hover:text-[#D4AF37] transition-all' />
 
-                <div className='w-24 h-1.5 bg-[#1a1a1a] rounded-full overflow-hidden border border-[#333]'>
-                    <div className='w-[60%] h-full bg-[#1ED760] rounded-full shadow-[0_0_10px_rgba(30,215,96,0.8)]'></div>
+                <div className='flex items-center gap-2 w-24 bg-[#1a1a1a] rounded-full h-1.5 relative group border border-[#333]'>
+                    <input 
+                        type="range" 
+                        min="0" 
+                        max="100" 
+                        value={volume * 100}
+                        onChange={changeVolume}
+                        className='absolute w-full h-full opacity-0 cursor-pointer z-10'
+                    />
+                    <div 
+                        style={{ width: `${volume * 100}%` }}
+                        className='h-full bg-gradient-to-r from-[#1ED760] to-[#159f46] rounded-full shadow-[0_0_10px_rgba(30,215,96,0.8)]'
+                    ></div>
                 </div>
 
                 <Maximize2 className='w-4 h-4 cursor-pointer hover:text-[#D4AF37] transition-all' />

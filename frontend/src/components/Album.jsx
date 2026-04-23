@@ -3,7 +3,7 @@ import Navbar from './Navbar'
 import { useParams } from 'react-router-dom'
 import { assets } from '../assets/assets'
 import { Clock, Play, Heart, MoreHorizontal } from 'lucide-react'
-import PlayerContext from '../context/PlayerContext'
+import { PlayerContext } from '../context/PlayerContext'
 
 const Album = () => {
   const { id } = useParams();
