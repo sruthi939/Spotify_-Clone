@@ -14,7 +14,11 @@ const userSchema = new mongoose.Schema({
     artistBio: { type: String, default: '' },
     
     // Playlists (references to Playlist model if created later)
-    likedSongs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Song' }]
+    likedSongs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Song' }],
+
+    // Subscription Context
+    isPremium: { type: Boolean, default: false },
+    currentPlan: { type: String, default: 'Free' }
 }, { minimize: false, timestamps: true });
 
 const userModel = mongoose.models.user || mongoose.model("user", userSchema);
