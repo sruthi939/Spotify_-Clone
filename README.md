@@ -104,13 +104,6 @@ Automated system alerts for administrative and user events:
 ---
 
 ## 👨‍💻 Author
-**Midhun M**  
-*Web Developer*  
-[Connect on LinkedIn](https://www.linkedin.com/in/midhun-m-09578a38a)
-
-## 🎨 UI/UX Designer
 **Sruthi Alex**  
 [Connect on LinkedIn](https://https://www.linkedin.com/in/sruthi-alex-b7784b37a/)
 
----
-*Created with passion for high-performance web engineering.*
