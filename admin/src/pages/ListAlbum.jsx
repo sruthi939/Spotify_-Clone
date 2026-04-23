@@ -6,6 +6,7 @@ import { Trash2, LayoutGrid, Search, AlertCircle, Loader2, Music } from 'lucide-
 const ListAlbum = () => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
+    const [searchTerm, setSearchTerm] = useState("")
 
     const fetchAlbums = async () => {
         try {
@@ -46,7 +47,13 @@ const ListAlbum = () => {
 
                 <div className='relative w-[300px]'>
                     <Search className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4' />
-                    <input type="text" placeholder="Search albums..." className='w-full bg-[#111] border border-[#222] rounded-full py-2 px-10 text-xs font-bold focus:outline-none focus:border-[#1ED760]' />
+                    <input 
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={searchTerm}
+                        type="text" 
+                        placeholder="Search albums..." 
+                        className='w-full bg-[#111] border border-[#222] rounded-full py-2 px-10 text-xs font-bold focus:outline-none focus:border-[#1ED760]' 
+                    />
                 </div>
             </div>
 
@@ -61,8 +68,11 @@ const ListAlbum = () => {
                     <p className='text-gray-500 font-bold'>No albums created yet.</p>
                 </div>
             ) : (
-                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-                    {data.map((item, index) => (
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8'>
+                {data.filter(item => 
+                    item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                    item.desc.toLowerCase().includes(searchTerm.toLowerCase())
+                ).map((item, index) => (
                         <div key={index} className='bg-[#111] rounded-[32px] p-6 border border-[#222] hover:border-[#1ED760]/30 transition-all group relative overflow-hidden'>
                             {/* Color Bar */}
                             <div style={{ backgroundColor: item.bgColour }} className='absolute top-0 left-0 w-full h-1 opacity-50'></div>

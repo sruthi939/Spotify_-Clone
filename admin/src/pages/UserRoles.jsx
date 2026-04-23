@@ -6,6 +6,7 @@ import { Users, Shield, User, UserCheck, Star, MoreVertical, Search, ShieldAlert
 const UserRoles = () => {
     const [users, setUsers] = useState([])
     const [loading, setLoading] = useState(true)
+    const [searchTerm, setSearchTerm] = useState("")
 
     const fetchUsers = async () => {
         try {
@@ -41,7 +42,13 @@ const UserRoles = () => {
                 
                 <div className='relative w-[350px]'>
                     <Search className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4' />
-                    <input type="text" placeholder="Search users or roles..." className='w-full bg-[#111] border border-[#222] rounded-full py-2.5 px-12 text-sm font-bold focus:outline-none focus:border-[#1ED760]' />
+                    <input 
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={searchTerm}
+                        type="text" 
+                        placeholder="Search users by name, email or role..." 
+                        className='w-full bg-[#111] border border-[#222] rounded-full py-2.5 px-12 text-sm font-bold focus:outline-none focus:border-[#1ED760]' 
+                    />
                 </div>
             </div>
 
@@ -67,7 +74,11 @@ const UserRoles = () => {
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-[#111]'>
-                            {users.map((u) => (
+                            {users.filter(u => 
+                                u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                u.role.toLowerCase().includes(searchTerm.toLowerCase())
+                            ).map((u) => (
                                 <tr key={u._id} className='group hover:bg-[#ffffff03] transition-all'>
                                     <td className='px-8 py-6'>
                                         <div className='flex items-center gap-4'>

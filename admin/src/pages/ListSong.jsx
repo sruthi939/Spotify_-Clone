@@ -6,6 +6,7 @@ import { Trash2, Play, Music, Clock, MoreVertical, Search, AlertCircle, Loader2 
 const ListSong = () => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
+    const [searchTerm, setSearchTerm] = useState("")
 
     const fetchSongs = async () => {
         try {
@@ -46,7 +47,13 @@ const ListSong = () => {
                 
                 <div className='relative w-[300px]'>
                     <Search className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4' />
-                    <input type="text" placeholder="Filter songs..." className='w-full bg-[#111] border border-[#222] rounded-full py-2 px-10 text-xs font-bold focus:outline-none focus:border-[#1ED760]' />
+                    <input 
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={searchTerm}
+                        type="text" 
+                        placeholder="Filter songs by name or artist..." 
+                        className='w-full bg-[#111] border border-[#222] rounded-full py-2 px-10 text-xs font-bold focus:outline-none focus:border-[#1ED760]' 
+                    />
                 </div>
             </div>
 
@@ -72,7 +79,10 @@ const ListSong = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map((item, index) => (
+                            {data.filter(item => 
+                                item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                item.desc.toLowerCase().includes(searchTerm.toLowerCase())
+                            ).map((item, index) => (
                                 <tr key={index} className='border-b border-[#111]/50 hover:bg-[#ffffff03] group transition-all'>
                                     <td className='px-8 py-4'>
                                         <div className='flex items-center gap-4'>

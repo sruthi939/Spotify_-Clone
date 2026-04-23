@@ -6,6 +6,7 @@ import { Crown, Search, User, CheckCircle, Star, Shield, Loader2, Mail } from 'l
 const PremiumAccounts = () => {
     const [users, setUsers] = useState([])
     const [loading, setLoading] = useState(true)
+    const [searchTerm, setSearchTerm] = useState("")
 
     const fetchPremiumUsers = async () => {
         try {
@@ -35,7 +36,13 @@ const PremiumAccounts = () => {
                 
                 <div className='relative w-[350px]'>
                     <Search className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4' />
-                    <input type="text" placeholder="Filter premium accounts..." className='w-full bg-[#111] border border-[#222] rounded-full py-2.5 px-12 text-sm font-bold focus:outline-none focus:border-[#D4AF37]' />
+                    <input 
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={searchTerm}
+                        type="text" 
+                        placeholder="Filter premium accounts..." 
+                        className='w-full bg-[#111] border border-[#222] rounded-full py-2.5 px-12 text-sm font-bold focus:outline-none focus:border-[#D4AF37]' 
+                    />
                 </div>
             </div>
 
@@ -51,7 +58,10 @@ const PremiumAccounts = () => {
                 </div>
             ) : (
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-                    {users.map((u, i) => (
+                    {users.filter(u => 
+                        u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                        u.email.toLowerCase().includes(searchTerm.toLowerCase())
+                    ).map((u, i) => (
                         <div key={i} className='bg-gradient-to-br from-[#111] to-[#050505] border border-[#222] p-8 rounded-[40px] relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all'>
                             <div className='absolute -top-10 -right-10 w-32 h-32 bg-[#D4AF37]/5 rounded-full blur-3xl group-hover:bg-[#D4AF37]/10 transition-all'></div>
                             

@@ -6,6 +6,7 @@ import { CreditCard, Search, Calendar, DollarSign, User as UserIcon, CheckCircle
 const PaymentHistory = () => {
     const [payments, setPayments] = useState([])
     const [loading, setLoading] = useState(true)
+    const [searchTerm, setSearchTerm] = useState("")
 
     const fetchPayments = async () => {
         try {
@@ -33,7 +34,13 @@ const PaymentHistory = () => {
                 
                 <div className='relative w-[350px]'>
                     <Search className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4' />
-                    <input type="text" placeholder="Search transactions..." className='w-full bg-[#111] border border-[#222] rounded-full py-2.5 px-12 text-sm font-bold focus:outline-none focus:border-[#1ED760]' />
+                    <input 
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={searchTerm}
+                        type="text" 
+                        placeholder="Search transactions by mobile or ID..." 
+                        className='w-full bg-[#111] border border-[#222] rounded-full py-2.5 px-12 text-sm font-bold focus:outline-none focus:border-[#1ED760]' 
+                    />
                 </div>
             </div>
 
@@ -60,7 +67,11 @@ const PaymentHistory = () => {
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-[#111]'>
-                            {payments.map((p, i) => (
+                            {payments.filter(p => 
+                                p.userMobile.includes(searchTerm) || 
+                                p.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                p.planName.toLowerCase().includes(searchTerm.toLowerCase())
+                            ).map((p, i) => (
                                 <tr key={i} className='group hover:bg-[#ffffff03] transition-all'>
                                     <td className='px-8 py-6'>
                                         <div className='flex items-center gap-4'>
